@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_12_071302) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_13_032802) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,15 +21,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_12_071302) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.text "content"
+    t.text "content", null: false
     t.bigint "conversation_id", null: false
     t.datetime "created_at", null: false
     t.integer "input_tokens"
     t.string "model"
     t.integer "output_tokens"
-    t.string "role"
+    t.string "role", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.check_constraint "role::text = ANY (ARRAY['user'::character varying, 'assistant'::character varying, 'system'::character varying]::text[])", name: "messages_role_check"
   end
 
   add_foreign_key "messages", "conversations"
