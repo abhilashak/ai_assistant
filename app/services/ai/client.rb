@@ -1,3 +1,4 @@
+# This service is used for chat with Ai Model
 class Ai::Client
   MODEL = "openrouter/free"
   BASE_URL = "https://openrouter.ai/api/v1"
@@ -14,7 +15,7 @@ class Ai::Client
   end
 
   def chat(message:)
-    @client.chat.completions.create(
+    response = @client.chat.completions.create(
       model: MODEL,
       messages: [
         {
@@ -23,5 +24,12 @@ class Ai::Client
         }
       ]
     )
+
+    {
+      content: response.choices.first.message.content,
+      model: response.model,
+      input_tokens: response.usage.prompt_tokens,
+      output_tokens: response.usage.completion_tokens
+    }
   end
 end
