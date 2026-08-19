@@ -9,7 +9,7 @@ class Ai::ChatService
     conversation.transaction do
       result = @ai_client.chat(message: user_message)
 
-      # TODO check result is success or not here
+      # TODO check result is success or not
       user_message_record = conversation.messages.create!(
         role: :user,
         content: user_message
