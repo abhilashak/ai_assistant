@@ -4,7 +4,9 @@
   <% @messages.each do |message| %>
     <div>
       <strong><%= message.role.capitalize %>:</strong>
-      <%= simple_format(message.content) %>
+      <div class="message-content">
+        <%= render_markdown(message.content) %>
+      </div>
     </div>
   <% end %>
 </div>
