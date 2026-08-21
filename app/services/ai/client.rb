@@ -14,15 +14,10 @@ class Ai::Client
     )
   end
 
-  def chat(message:)
+  def chat(messages:)
     response = @client.chat.completions.create(
       model: MODEL,
-      messages: [
-        {
-          role: "user",
-          content: message
-        }
-      ]
+      messages: messages
     )
 
     {
