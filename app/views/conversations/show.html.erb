@@ -2,19 +2,19 @@
 
 <div id="messages">
   <% @messages.each do |message| %>
-    <div>
-      <strong><%= message.role.capitalize %>:</strong>
+    <article class="message <%= message.role %>">
+      <strong><%= message.role.capitalize %></strong>
       <div class="message-content">
         <%= render_markdown(message.content) %>
       </div>
-    </div>
+    </article>
   <% end %>
 </div>
 
-<hr>
-
 <%= form_with url: conversation_messages_path(@conversation), method: :post, local: true do |form| %>
-  <%= form.text_area :content, rows: 4, placeholder: "Ask something..." %>
+  <%= form.text_area :content,
+      rows: 4,
+      placeholder: "Ask something..." %>
 
   <%= form.submit "Send" %>
 <% end %>
