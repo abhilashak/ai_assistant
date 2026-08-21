@@ -1,0 +1,7 @@
+<h1>AI Assistant</h1>
+
+<%= form_with model: @conversation, local: true do |form| %>
+  <%= form.text_field :title, placeholder: "Conversation title" %>
+
+  <%= form.submit "Start conversation" %>
+<% end %>
