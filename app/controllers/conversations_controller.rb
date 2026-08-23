@@ -5,7 +5,7 @@ class ConversationsController < ApplicationController
 
   def create
     @conversation = Conversation.create!(
-      title: params[:title].presence || "New conversation"
+      title: conv_params[:title].presence || "New conversation"
     )
 
     redirect_to conversation_path(@conversation)
@@ -14,5 +14,11 @@ class ConversationsController < ApplicationController
   def show
     @conversation = Conversation.find(params[:id])
     @messages = @conversation.messages.order(:created_at)
+  end
+
+  private
+
+  def conv_params
+    params.require(:conversation)
   end
 end

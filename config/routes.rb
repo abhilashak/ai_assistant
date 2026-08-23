@@ -15,5 +15,8 @@ Rails.application.routes.draw do
   resources :conversations, only: [ :create, :show ] do
     resources :messages, only: [ :create ]
   end
+  get "conversations/:conversation_id/messages/stream",
+      to: "messages#stream",
+      as: :conversations_messages_stream
   root "conversations#new"
 end

@@ -27,4 +27,29 @@ class Ai::Client
       output_tokens: response.usage.completion_tokens
     }
   end
+
+  def stream_chat(messages:, &on_delta)
+    stream = @client.chat.completions.stream_raw(
+      model: MODEL,
+      messages: messages
+    )
+
+    final_usage = nil
+
+    stream.each do |chunk|
+      if chunk.choices.any?
+        delta = chunk.choices.first&.delta&.content
+
+        on_delta.call(delta) if delta.present?
+      end
+
+      final_usage = chunk.usage if chunk.usage
+    end
+
+    {
+      model: MODEL,
+      input_tokens: final_usage&.prompt_tokens,
+      output_tokens: final_usage&.completion_tokens
+    }
+  end
 end
