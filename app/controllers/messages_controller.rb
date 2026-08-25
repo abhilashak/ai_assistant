@@ -50,8 +50,9 @@ class MessagesController < ApplicationController
         event: "done"
       )
     rescue IOError
-      puts ">>>>>>>>>>>>>>>>>>>>> Error Occured: IOError"
-      # Client disconnected
+      Rails.logger.debug(">>>>>>>>>>>>>> Error Occured: IOError")
+    rescue ActionController::Live::ClientDisconnected
+      Rails.logger.debug(">>>>>>>>>>>>>> SSE client disconnected")
     ensure
       sse.close
     end
