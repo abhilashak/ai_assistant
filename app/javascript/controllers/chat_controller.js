@@ -1,7 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
+console.log("chat_controller.js loaded")
+
 export default class extends Controller {
+  connect() {
+    console.log("Chat controller connected")
+  }
+
   submit(event) {
+    console.log("Chat submit triggered")
+
     event.preventDefault()
 
     const form = event.currentTarget

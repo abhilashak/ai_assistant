@@ -1,3 +1,21 @@
+<%= form_with(
+  url: conversation_messages_path(@conversation),
+  method: :post,
+  data: {
+    controller: "chat",
+    action: "submit->chat#submit",
+    turbo: false
+  }
+) do |form| %>
+
+  <%= form.text_area :content,
+      rows: 4,
+      size: "80x20",
+      placeholder: "Ask something..." %>
+
+  <%= form.submit "Send" %>
+<% end %>
+
 <div id="messages">
   <% @messages.each do |message| %>
     <article class="message <%= message.role %>">
@@ -9,18 +27,5 @@
     </article>
   <% end %>
 </div>
-
-<%= form_with(
-  url: conversation_messages_path(@conversation),
-  method: :post,
-  data: { controller: "chat", action: "submit->chat#submit" }
-) do |form| %>
-  <%= form.text_area :content,
-      rows: 4,
-      size: "20x20",
-      placeholder: "Ask something..." %>
-
-  <%= form.submit "Send" %>
-<% end %>
 
 <div id="streaming-response"></div>
