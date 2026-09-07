@@ -1,6 +1,6 @@
 # This service is used for chat with Ai Model
 class Ai::Client
-  MODEL = "openrouter/free"
+  MODEL = "openai/gpt-oss-20b:free"
   BASE_URL = "https://openrouter.ai/api/v1"
 
   def initialize
