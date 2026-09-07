@@ -1,6 +1,11 @@
 # This service is used for chat with Ai Model
+require_relative "error"
 class Ai::Client
-  MODEL = "openai/gpt-oss-20b:free"
+  MODELS = [
+    "minimax/minimax-m3:free",
+    "google/gemma-4-31b-it:free",
+    "nvidia/nemotron-3-super-120b-a12b:free"
+  ].freeze
   BASE_URL = "https://openrouter.ai/api/v1"
 
   def initialize
@@ -16,7 +21,10 @@ class Ai::Client
 
   def chat(messages:)
     response = @client.chat.completions.create(
-      model: MODEL,
+      model: MODELS.first,
+      extra_body: {
+        models: MODELS.drop(1)
+      },
       messages: messages
     )
 
@@ -26,6 +34,24 @@ class Ai::Client
       input_tokens: response.usage.prompt_tokens,
       output_tokens: response.usage.completion_tokens
     }
+  rescue OpenAI::Errors::RateLimitError => e
+    raise Ai::RateLimitError, e.message
+
+  rescue OpenAI::Errors::APITimeoutError => e
+    raise Ai::TimeoutError, e.message
+
+  rescue OpenAI::Errors::APIConnectionError => e
+    raise Ai::ProviderError, e.message
+
+  rescue OpenAI::Errors::BadRequestError,
+          OpenAI::Errors::AuthenticationError,
+          OpenAI::Errors::PermissionDeniedError,
+          OpenAI::Errors::NotFoundError,
+          OpenAI::Errors::ConflictError,
+          OpenAI::Errors::UnprocessableEntityError,
+          OpenAI::Errors::InternalServerError,
+          OpenAI::Errors::APIStatusError => e
+    raise Ai::ProviderError, e.message
   end
 
   def stream_chat(messages:, &on_delta)
