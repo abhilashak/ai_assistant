@@ -1,0 +1,131 @@
+<h1>AI Request #<%= @ai_request.id %></h1>
+
+<p>
+  <%= link_to "← Back to AI Requests",
+      admin_ai_requests_path %>
+</p>
+
+<table>
+  <tbody>
+    <tr>
+      <th>Provider</th>
+      <td><%= @ai_request.provider %></td>
+    </tr>
+
+    <tr>
+      <th>Model</th>
+      <td><%= @ai_request.model %></td>
+    </tr>
+
+    <tr>
+      <th>Operation</th>
+      <td><%= @ai_request.operation %></td>
+    </tr>
+
+    <tr>
+      <th>Status</th>
+      <td><%= @ai_request.status %></td>
+    </tr>
+
+    <tr>
+      <th>Streamed</th>
+      <td><%= @ai_request.streamed? ? "Yes" : "No" %></td>
+    </tr>
+
+    <tr>
+      <th>Input Tokens</th>
+      <td><%= @ai_request.input_tokens || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Output Tokens</th>
+      <td><%= @ai_request.output_tokens || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Total Tokens</th>
+      <td><%= @ai_request.total_tokens %></td>
+    </tr>
+
+    <tr>
+      <th>Estimated Cost</th>
+      <td>
+        <%= @ai_request.estimated_cost || "N/A" %>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Latency</th>
+      <td>
+        <%= @ai_request.latency_ms ?
+            "#{@ai_request.latency_ms} ms" :
+            "N/A" %>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Retries</th>
+      <td><%= @ai_request.retry_count %></td>
+    </tr>
+
+    <tr>
+      <th>HTTP Status</th>
+      <td><%= @ai_request.http_status || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Request ID</th>
+      <td><%= @ai_request.request_id || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Started At</th>
+      <td><%= @ai_request.started_at || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Completed At</th>
+      <td><%= @ai_request.completed_at || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Conversation</th>
+      <td>
+        <% if @ai_request.conversation %>
+          <%= link_to(
+            "##{@ai_request.conversation.id}",
+            conversation_path(@ai_request.conversation)
+          ) %>
+        <% else %>
+          N/A
+        <% end %>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Message</th>
+      <td>
+        <%= @ai_request.message_id || "N/A" %>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Error Class</th>
+      <td><%= @ai_request.error_class || "N/A" %></td>
+    </tr>
+
+    <tr>
+      <th>Error Message</th>
+      <td>
+        <pre><%= @ai_request.error_message || "N/A" %></pre>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Metadata</th>
+      <td>
+        <pre><%= JSON.pretty_generate(@ai_request.metadata) %></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>

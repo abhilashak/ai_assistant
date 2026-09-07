@@ -1,0 +1,43 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  conversation: one
+  message: one
+  provider: MyString
+  model: MyString
+  operation: MyString
+  status: MyString
+  input_tokens: 1
+  output_tokens: 1
+  estimated_cost: 9.99
+  latency_ms: 1
+  retry_count: 1
+  http_status: 1
+  request_id: MyString
+  error_class: MyString
+  error_message: MyText
+  started_at: 2026-09-06 13:00:53
+  completed_at: 2026-09-06 13:00:53
+  streamed: false
+  metadata: 
+
+two:
+  conversation: two
+  message: two
+  provider: MyString
+  model: MyString
+  operation: MyString
+  status: MyString
+  input_tokens: 1
+  output_tokens: 1
+  estimated_cost: 9.99
+  latency_ms: 1
+  retry_count: 1
+  http_status: 1
+  request_id: MyString
+  error_class: MyString
+  error_message: MyText
+  started_at: 2026-09-06 13:00:53
+  completed_at: 2026-09-06 13:00:53
+  streamed: false
+  metadata: 

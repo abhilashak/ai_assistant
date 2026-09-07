@@ -10,7 +10,7 @@ class Ai::ChatService
   def call(conversation:, user_message:)
     conversation.transaction do
       # save user message
-      conversation.messages.create!(
+      user_message_record = conversation.messages.create!(
         role: :user,
         content: user_message
       )
@@ -20,17 +20,60 @@ class Ai::ChatService
         conversation: conversation
       ).build
 
-      # call LLM
-      result = @ai_client.chat(messages: messages)
-
-      # save assistant response
-      conversation.messages.create!(
-        role: :assistant,
-        content: result[:content],
-        model: result[:model],
-        input_tokens: result[:input_tokens],
-        output_tokens: result[:output_tokens]
+      # store metadata
+      ai_request = conversation.ai_requests.create!(
+        message: user_message_record,
+        provider: "openrouter",
+        model: Ai::Client::MODEL,
+        operation: "chat",
+        status: :pending,
+        streamed: false,
+        started_at: Time.current,
+        request_id: SecureRandom.uuid
       )
+
+      started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+      begin
+        # call LLM
+        result = @ai_client.chat(messages: messages)
+
+        latency_ms =
+          (
+            Process.clock_gettime(Process::CLOCK_MONOTONIC) -
+            started_at
+          ) * 1000
+
+        # save assistant response
+        assistant_message = conversation.messages.create!(
+          role: :assistant,
+          content: result[:content],
+          model: result[:model],
+          input_tokens: result[:input_tokens],
+          output_tokens: result[:output_tokens]
+        )
+
+        ai_request.update!(
+          message: assistant_message,
+          status: :success,
+          input_tokens: result[:input_tokens],
+          output_tokens: result[:output_tokens],
+          latency_ms: latency_ms.round,
+          completed_at: Time.current,
+          http_status: 200
+        )
+
+        assistant_message
+      rescue => e
+        ai_request.update!(
+          status: :failed,
+          error_class: e.class.name,
+          error_message: e.message,
+          completed_at: Time.current
+        )
+
+        raise
+      end
     end
   end
 end

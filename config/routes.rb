@@ -19,4 +19,9 @@ Rails.application.routes.draw do
       to: "messages#stream",
       as: :conversations_messages_stream
   root "conversations#new"
+
+  #### Admin
+  namespace :admin do
+    resources :ai_requests, only: %i[index show]
+  end
 end

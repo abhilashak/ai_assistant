@@ -1,0 +1,86 @@
+<h1>AI Observability</h1>
+
+<section>
+  <h2>Summary</h2>
+
+  <dl>
+    <dt>Total Requests</dt>
+    <dd><%= @total_requests %></dd>
+
+    <dt>Successful</dt>
+    <dd><%= @successful_requests %></dd>
+
+    <dt>Failed</dt>
+    <dd><%= @failed_requests %></dd>
+
+    <dt>Input Tokens</dt>
+    <dd><%= number_with_delimiter(@total_input_tokens) %></dd>
+
+    <dt>Output Tokens</dt>
+    <dd><%= number_with_delimiter(@total_output_tokens) %></dd>
+
+    <dt>Average Latency</dt>
+    <dd>
+      <%= @average_latency ? "#{@average_latency.round} ms" : "N/A" %>
+    </dd>
+
+    <dt>Estimated Cost</dt>
+    <dd>
+      <%= @estimated_cost ? number_to_currency(@estimated_cost) : "N/A" %>
+    </dd>
+  </dl>
+</section>
+
+<hr>
+
+<h2>Recent Requests</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Time</th>
+      <th>Provider</th>
+      <th>Model</th>
+      <th>Operation</th>
+      <th>Status</th>
+      <th>Tokens</th>
+      <th>Latency</th>
+      <th>Retries</th>
+      <th>HTTP</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ai_requests.each do |request| %>
+      <tr>
+        <td>
+          <%= link_to request.id,
+              admin_ai_request_path(request) %>
+        </td>
+
+        <td>
+          <%= request.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
+        </td>
+
+        <td><%= request.provider %></td>
+
+        <td><%= request.model %></td>
+
+        <td><%= request.operation %></td>
+
+        <td><%= request.status %></td>
+
+        <td><%= number_with_delimiter(request.total_tokens) %></td>
+
+        <td>
+          <%= request.latency_ms ? "#{request.latency_ms} ms" : "N/A" %>
+        </td>
+
+        <td><%= request.retry_count %></td>
+
+        <td><%= request.http_status || "N/A" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

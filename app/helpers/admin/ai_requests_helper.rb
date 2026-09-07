@@ -1,0 +1,2 @@
+module Admin::AiRequestsHelper
+end
