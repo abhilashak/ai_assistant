@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_06_073053) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_08_062537) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "vector"
 
   create_table "ai_requests", force: :cascade do |t|
     t.datetime "completed_at"
@@ -51,6 +52,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_073053) do
     t.datetime "updated_at", null: false
   end
 
+# Could not dump table "document_chunks" because of following StandardError
+#   Unknown type 'vector' for column 'embedding'
+
+
+  create_table "documents", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "source"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "messages", force: :cascade do |t|
     t.text "content", null: false
     t.bigint "conversation_id", null: false
@@ -66,5 +78,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_073053) do
 
   add_foreign_key "ai_requests", "conversations"
   add_foreign_key "ai_requests", "messages"
+  add_foreign_key "document_chunks", "documents"
   add_foreign_key "messages", "conversations"
 end

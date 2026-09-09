@@ -6,6 +6,9 @@ class Ai::Client
     "google/gemma-4-31b-it:free",
     "nvidia/nemotron-3-super-120b-a12b:free"
   ].freeze
+
+  EMBEDDING_MODEL = "liquid/lfm-2.5-embedding-350m:free"
+
   BASE_URL = "https://openrouter.ai/api/v1"
 
   def initialize
@@ -76,6 +79,19 @@ class Ai::Client
       model: MODEL,
       input_tokens: final_usage&.prompt_tokens,
       output_tokens: final_usage&.completion_tokens
+    }
+  end
+
+  def embed(text:)
+    response = @client.embeddings.create(
+      model: EMBEDDING_MODEL,
+      input: text
+    )
+
+    {
+      embedding: response.data.first.embedding,
+      model: response.model,
+      input_tokens: response.usage&.prompt_tokens
     }
   end
 end
