@@ -5,4 +5,6 @@ class DocumentChunk < ApplicationRecord
 
   validates :content, presence: true
   validates :chunk_index, presence: true
+
+  scope :has_embedding, -> { where.not(embedding: nil) }
 end
