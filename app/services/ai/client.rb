@@ -2,9 +2,9 @@
 require_relative "error"
 class Ai::Client
   MODELS = [
+    "nvidia/nemotron-3-super-120b-a12b:free",
     "minimax/minimax-m3:free",
-    "google/gemma-4-31b-it:free",
-    "nvidia/nemotron-3-super-120b-a12b:free"
+    "google/gemma-4-31b-it:free"
   ].freeze
 
   EMBEDDING_MODEL = "liquid/lfm-2.5-embedding-350m:free"
@@ -25,10 +25,12 @@ class Ai::Client
   def chat(messages:)
     response = @client.chat.completions.create(
       model: MODELS.first,
-      extra_body: {
-        models: MODELS.drop(1)
-      },
-      messages: messages
+      messages: messages,
+      request_options: {
+        extra_body: {
+          models: MODELS.drop(1)
+        }
+      }
     )
 
     {

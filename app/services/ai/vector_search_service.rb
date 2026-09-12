@@ -1,3 +1,5 @@
+# @params: query(String)
+# @return DocumentChunk
 class Ai::VectorSearchService
   DEFAULT_LIMIT = 1
 
