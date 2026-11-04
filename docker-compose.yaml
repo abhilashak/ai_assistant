@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: rails
+      POSTGRES_PASSWORD: rails
+      POSTGRES_DB: rails_ai_assistant_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build:
+      context: .
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USERNAME: rails
+      DATABASE_PASSWORD: rails
+      RAILS_ENV: development
+    command: bin/rails server -b 0.0.0.0
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  bundle_cache:
