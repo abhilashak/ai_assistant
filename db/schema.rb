@@ -78,6 +78,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_062537) do
 
   add_foreign_key "ai_requests", "conversations"
   add_foreign_key "ai_requests", "messages"
-  add_foreign_key "document_chunks", "documents"
+  # add_foreign_key "document_chunks", "documents"
   add_foreign_key "messages", "conversations"
 end
